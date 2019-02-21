@@ -16,6 +16,12 @@ import android.content.Intent
 import android.database.Cursor
 import android.view.Menu
 import android.view.MenuItem
+import android.R.id.edit
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class MainActivity : AppCompatActivity() {

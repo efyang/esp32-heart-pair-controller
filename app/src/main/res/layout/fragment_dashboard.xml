@@ -16,4 +16,16 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_constraintGuide_begin="205dp" android:id="@+id/guideline2"/>
+    <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2" app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="64dp">
+
+        <TextView
+                android:text="Happy Color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/textView3" android:fontFamily="sans-serif-light"
+                android:textSize="18sp" android:textAlignment="viewStart"/>
+    </FrameLayout>
 </android.support.constraint.ConstraintLayout>
