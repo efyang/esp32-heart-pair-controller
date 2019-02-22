@@ -3,7 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="title_device_network">Device Network</string>
+    <string name="title_device_network">Network Settings</string>
     <string name="localUserName">Cindy</string>
     <string name="pairedUserName">Edward</string>
 </resources>

@@ -16,10 +16,11 @@ class HomeFragment : Fragment() {
 
         val prefs = this.activity!!.getSharedPreferences("com.example.esp32heartpaircontroller", Context.MODE_PRIVATE)
         val localNameDisplayView = view.findViewById(R.id.localNameDisplay) as TextView
-        System.out.println(prefs.getString("localUserName", ""))
-        localNameDisplayView.text = prefs.getString("localUserName", "")
+        System.out.println(prefs == null)
+        System.out.println(prefs.getString("localUserName", "nul"))
+        localNameDisplayView.text = prefs.getString("localUserName", getString(R.string.localUserName))
         val pairedNameDisplayView = view.findViewById(R.id.pairedNameDisplay) as TextView
-        pairedNameDisplayView.text = prefs.getString("pairedUserName", "")
+        pairedNameDisplayView.text = prefs.getString("pairedUserName", getString(R.string.pairedUserName))
         return view
     }
 }
