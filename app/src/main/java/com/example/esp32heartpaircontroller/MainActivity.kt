@@ -3,10 +3,10 @@ package com.example.esp32heartpaircontroller
 import android.Manifest.permission.READ_CONTACTS
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.jar.Manifest
 import android.accounts.Account
