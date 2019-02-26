@@ -6,5 +6,14 @@
     <string name="title_device_network">Network Settings</string>
     <string name="localUserName">Cindy</string>
     <string name="pairedUserName">Edward</string>
-    <string name="heart_emoji">\u2764</string>
+    <string name="heart_emoji">❤️</string>
+    <string name="disgust_emoji">🤢</string>
+    <string-array name="moodNames">
+        <item>Love</item>
+        <item>Happy</item>
+        <item>Sad</item>
+        <item>Fear</item>
+        <item>Anger</item>
+        <item>Disgust</item>
+    </string-array>
 </resources>
