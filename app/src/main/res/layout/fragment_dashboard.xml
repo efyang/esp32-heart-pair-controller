@@ -55,8 +55,9 @@
                                         app:layout_constraintHorizontal_bias="0.0"
                                         android:id="@+id/colorPicker" app:lightness_indicator_radius="8dp"
                                         app:hue_indicator_radius="8dp" app:saturation_indicator_radius="8dp"
-                                        app:hue_radius_offset="-5dp" android:paddingTop="10dp"
-                                        android:paddingBottom="10dp"/>
+                                        app:hue_radius_offset="-15dp" android:paddingTop="25dp"
+                                        android:paddingBottom="25dp" app:hue_arc_width="10dp"
+                                        app:lightness_arc_width="10dp" app:saturation_arc_width="10dp"/>
 
     <ImageView
             android:id="@+id/imageView"

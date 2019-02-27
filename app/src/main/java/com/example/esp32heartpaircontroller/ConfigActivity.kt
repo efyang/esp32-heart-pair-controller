@@ -19,13 +19,15 @@ class ConfigActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_config)
 
+
+        val prefs = this.getSharedPreferences("com.example.esp32heartpaircontroller", Context.MODE_PRIVATE)
+        localNameInput.setText(prefs.getString("localUserName", getString(R.string.localUserName)))
+        pairedNameInput.setText(prefs.getString("pairedUserName", getString(R.string.pairedUserName)))
+
         configOkButton.setOnClickListener{it ->
             // update the values
-            val prefs = this.getSharedPreferences("com.example.esp32heartpaircontroller", Context.MODE_PRIVATE)
             prefs.edit().putString("localUserName", localNameInput.text.toString()).apply()
             prefs.edit().putString("pairedUserName", pairedNameInput.text.toString()).apply()
-
-            System.out.println(prefs.getString("localUserName", ""))
 
             val intent = Intent(this, MainActivity::class.java).apply {}
             startActivity(intent)

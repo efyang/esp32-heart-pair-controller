@@ -35,5 +35,6 @@ dependencies {
 }
 
 dependencies {
-    implementation 'com.github.madrapps:pikolo:1.1.6'
+    //implementation 'com.github.madrapps:pikolo:1.1.6'
+    implementation project(':pikolo')
 }

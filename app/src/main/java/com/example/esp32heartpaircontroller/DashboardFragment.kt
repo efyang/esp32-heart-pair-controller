@@ -50,7 +50,7 @@ class DashboardFragment : Fragment() {
                 val color = moodColors[currentTab]
                 setColor(color, imageView, colorPicker)
                 tabs.setSelectedTabIndicatorColor(color)
-                moodName.text = moodNames[currentTab] + " " + tab.text + " Color"
+                moodName.text = moodNames[currentTab] + " Color"
             }
 
             override fun onTabUnselected(p0: TabLayout.Tab?) {
