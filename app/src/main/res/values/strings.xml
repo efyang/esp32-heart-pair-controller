@@ -10,15 +10,15 @@
 
     <string name="happyNote">:)))</string>
     <string name="sadNote">:\'(</string>
-    <string name="fearNote">o_0</string>
+    <string name="fearNote">😟</string>
     <string name="angerNote">&gt;:(</string>
 
     <string-array name="moodNames">
         <item>Love</item>
         <item>Happy</item>
         <item>Sad</item>
-        <item>Fear</item>
-        <item>Anger</item>
+        <item>Nervous</item>
+        <item>Angry</item>
     </string-array>
 
     <string name="notifyTitle">Notification</string>
