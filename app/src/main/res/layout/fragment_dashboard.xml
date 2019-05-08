@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                                   android:background="#FFFFFF"
                                                    android:layout_height="match_parent">
 
     <TextView
@@ -28,23 +29,20 @@
         <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=":)))" android:id="@+id/happyTab" android:tag="happy"/>
+                android:text="@string/happyNote" android:id="@+id/happyTab" android:tag="happy"/>
 
         <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=":'(" android:id="@+id/sadTab" android:tag="sad"/>
+                android:text="@string/sadNote" android:id="@+id/sadTab" android:tag="sad"/>
         <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/fearTab" android:text="o_0" android:tag='"fear"'/>
+                android:layout_height="wrap_content" android:id="@+id/fearTab" android:text="@string/fearNote"
+                android:tag='"fear"'/>
         <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/angerTab" android:text="&gt;:("
+                android:layout_height="wrap_content" android:id="@+id/angerTab" android:text="@string/angerNote"
                 android:tag="anger"/>
-        <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/disgustTab" android:text="@string/disgust_emoji"
-                android:tag="disgust"/>
     </com.google.android.material.tabs.TabLayout>
 
     <com.madrapps.pikolo.HSLColorPicker android:layout_width="0dp" android:layout_height="300dp"

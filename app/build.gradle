@@ -32,9 +32,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+    implementation 'com.clj.fastble:FastBleLib:2.3.4'
+
 }
 
 dependencies {
     //implementation 'com.github.madrapps:pikolo:1.1.6'
     implementation project(':pikolo')
+    implementation 'androidx.cardview:cardview:1.0.0'
 }

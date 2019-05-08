@@ -3,17 +3,27 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="title_device_network">Network Settings</string>
+    <string name="title_device_network">Network</string>
     <string name="localUserName">Cindy</string>
     <string name="pairedUserName">Edward</string>
     <string name="heart_emoji">❤️</string>
-    <string name="disgust_emoji">🤢</string>
+
+    <string name="happyNote">:)))</string>
+    <string name="sadNote">:\'(</string>
+    <string name="fearNote">o_0</string>
+    <string name="angerNote">&gt;:(</string>
+
     <string-array name="moodNames">
         <item>Love</item>
         <item>Happy</item>
         <item>Sad</item>
         <item>Fear</item>
         <item>Anger</item>
-        <item>Disgust</item>
     </string-array>
+
+    <string name="notifyTitle">Notification</string>
+    <string name="gpsNotifyMsg">GPS Capabilities need to be enabled.</string>
+    <string name="cancel">Cancel</string>
+    <string name="setting">Continue</string>
+    <string name="please_open_blue">Please Enable Bluetooth</string>
 </resources>

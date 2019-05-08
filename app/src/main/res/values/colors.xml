@@ -7,14 +7,12 @@
     <color name="defaultHappyColor">#FFF176</color>
     <color name="defaultSadColor">#92A8D1</color>
     <color name="defaultFearColor">#ab47bc</color>
-    <color name="defaultAngerColor">#7f0000</color>
-    <color name="defaultDisgustColor">#7cb342</color>
+    <color name="defaultAngerColor">#7F0000</color>
     <array name="defaultMoodColors">
         <item>@color/defaultLoveColor</item>
         <item>@color/defaultHappyColor</item>
         <item>@color/defaultSadColor</item>
         <item>@color/defaultFearColor</item>
         <item>@color/defaultAngerColor</item>
-        <item>@color/defaultDisgustColor</item>
     </array>
 </resources>
