@@ -18,6 +18,8 @@ import com.madrapps.pikolo.listeners.OnColorSelectionListener
 
 open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
+    var touchable: Boolean = true
+
     private val metrics = Metrics(density = resources.displayMetrics.density)
     private val paints = Paints()
 
@@ -108,14 +110,18 @@ open class HSLColorPicker @JvmOverloads constructor(context: Context, attrs: Att
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        var isTouched = true
-        if (!hueComponent.onTouchEvent(event)) {
-            if (!saturationComponent.onTouchEvent(event)) {
-                isTouched = lightnessComponent.onTouchEvent(event)
+        if (touchable) {
+            var isTouched = true
+            if (!hueComponent.onTouchEvent(event)) {
+                if (!saturationComponent.onTouchEvent(event)) {
+                    isTouched = lightnessComponent.onTouchEvent(event)
+                }
             }
+            invalidate()
+            return isTouched
+        } else {
+            return true
         }
-        invalidate()
-        return isTouched
     }
 
     fun setColorSelectionListener(listener: OnColorSelectionListener) {

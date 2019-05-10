@@ -15,4 +15,5 @@
         <item>@color/defaultFearColor</item>
         <item>@color/defaultAngerColor</item>
     </array>
+    <color name="defaultLampColor">#FFC7B0</color>
 </resources>

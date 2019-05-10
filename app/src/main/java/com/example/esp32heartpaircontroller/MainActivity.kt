@@ -18,6 +18,7 @@ import android.database.Cursor
 import android.view.Menu
 import android.view.MenuItem
 import android.R.id.edit
+import android.app.WallpaperColors
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -36,17 +37,24 @@ import kotlinx.android.synthetic.main.fragment_home.*
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var defaultMoodColors: IntArray
+    lateinit var moodColors: IntArray
+    lateinit var moodNames: Array<String>
+    var lampColor: Int = 0
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         var fragment: Fragment? = null;
         when (item.itemId) {
             R.id.navigation_home -> {
-                fragment = HomeFragment();
+                fragment = HomeFragment()
             }
             R.id.navigation_dashboard -> {
-                fragment = DashboardFragment();
+                fragment = DashboardFragment()
             }
             R.id.navigation_device_network -> {
-                fragment = NetworkSettingsFragment();
+                fragment = NetworkSettingsFragment()
+            }
+            R.id.navigation_lamp -> {
+                fragment = LampFragment()
             }
         }
         return@OnNavigationItemSelectedListener loadFragment(fragment)
@@ -57,16 +65,20 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit()
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setBluetooth(true);
+        defaultMoodColors = resources.getIntArray(R.array.defaultMoodColors)
+        moodColors = defaultMoodColors.copyOf()
+        moodNames = resources.getStringArray(R.array.moodNames)
+        lampColor = resources.getColor(R.color.defaultLampColor)
+        setBluetooth(true)
         checkPermissions()
         BleManager.getInstance().init(getApplication());
         BleManager.getInstance()
@@ -99,9 +111,29 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         System.out.println(item)
         when (item?.itemId) {
-            R.id.config -> {
+            R.id.name_config -> {
                 val intent = Intent(this, ConfigActivity::class.java).apply {}
                 startActivity(intent)
+            }
+            R.id.ble_settings -> {
+                val intent = Intent(this, BLEConfigActivity::class.java).apply {}
+                startActivity(intent)
+            }
+            R.id.color_reset -> {
+                moodColors = defaultMoodColors.copyOf()
+                lampColor = resources.getColor(R.color.defaultLampColor)
+                Toast.makeText(applicationContext, "Reset All Colors.", Toast.LENGTH_SHORT).show()
+                val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+                if (currentFragment is LampFragment) {
+                    val f = (currentFragment as LampFragment)
+                    f.setColor(lampColor)
+                } else if (currentFragment is DashboardFragment) {
+                    val f = (currentFragment as DashboardFragment)
+                    f.setColor(moodColors[f.currentTab])
+                } else if (currentFragment is HomeFragment) {
+                    val f = (currentFragment as HomeFragment)
+                    f.reloadColors()
+                }
             }
         }
         return super.onOptionsItemSelected(item)

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Configuration" android:id="@+id/config"/>
+    <item android:title="Name Configuration" android:id="@+id/name_config"/>
+    <item android:title="Save Configuration To Device" android:id="@+id/save_config"/>
+    <item android:title="Reset All Colors" android:id="@+id/color_reset"/>
+    <item android:title="(Advanced) BLE Settings" android:id="@+id/ble_settings"/>
 </menu>

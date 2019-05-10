@@ -9,8 +9,10 @@ import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.coroutines.GlobalScope;
 import kotlinx.coroutines.launch
 import android.graphics.PorterDuff
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 import com.madrapps.pikolo.HSLColorPicker
@@ -20,15 +22,17 @@ import kotlinx.coroutines.async
 
 class DashboardFragment : Fragment() {
 
+    var currentTab = 0
+    lateinit var colorPicker: HSLColorPicker
+    lateinit var imageView: ImageView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_dashboard, null)
-        var moodColors = resources.getIntArray(R.array.defaultMoodColors)
-        var moodNames = resources.getStringArray(R.array.moodNames)
-        var currentTab = 0
+        val parentActivity = activity!! as MainActivity
 
-        val colorPicker: HSLColorPicker = view.findViewById(R.id.colorPicker)
-        val imageView: ImageView = view.findViewById(R.id.imageView)
+        colorPicker = view.findViewById(R.id.colorPicker)
+        imageView = view.findViewById(R.id.imageView)
         val moodName: TextView = view.findViewById(R.id.moodName)
+        val colorResetButton: Button = view.findViewById(R.id.colorResetButton)
 
         imageView.background.setColorFilter(resources.getColor(R.color.colorPrimary), PorterDuff.Mode.MULTIPLY)
         colorPicker.setColor(resources.getColor(R.color.colorPrimary))
@@ -38,19 +42,18 @@ class DashboardFragment : Fragment() {
             override fun onColorSelected(color: Int) {
                 // Do whatever you want with the color
                 imageView.background.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
-                moodColors[currentTab] = color
+                parentActivity.moodColors[currentTab] = color
                 tabs.setSelectedTabIndicatorColor(color)
             }
         })
 
-
         tabs.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 currentTab = tab?.position!!
-                val color = moodColors[currentTab]
-                setColor(color, imageView, colorPicker)
+                val color = parentActivity.moodColors[currentTab]
+                setColor(color)
                 tabs.setSelectedTabIndicatorColor(color)
-                moodName.text = moodNames[currentTab] + " Color"
+                moodName.text = parentActivity.moodNames[currentTab] + " Color"
             }
 
             override fun onTabUnselected(p0: TabLayout.Tab?) {
@@ -60,13 +63,21 @@ class DashboardFragment : Fragment() {
             }
         })
 
+        colorResetButton.setOnClickListener {
+            parentActivity.moodColors[currentTab] = parentActivity.defaultMoodColors[currentTab]
+            val color = parentActivity.moodColors[currentTab]
+            setColor(color)
+            tabs.setSelectedTabIndicatorColor(color)
+            Toast.makeText(context, "Reset " + parentActivity.moodNames[currentTab] + " Color", Toast.LENGTH_SHORT).show()
+        }
+
         tabs.getTabAt(1)?.select()
         tabs.getTabAt(0)?.select()
 
         return view
     }
 
-    fun setColor(color: Int, imageView: ImageView, colorPicker: HSLColorPicker) {
+    fun setColor(color: Int) {
         colorPicker.setColor(color)
         imageView.background.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
     }
