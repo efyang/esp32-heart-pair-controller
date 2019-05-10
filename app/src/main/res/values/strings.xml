@@ -26,4 +26,7 @@
     <string name="cancel">Cancel</string>
     <string name="setting">Continue</string>
     <string name="please_open_blue">Please Enable Bluetooth</string>
+
+    <string name="device_mac_address">24:0A:C4:A5:D3:12</string>
+    <!-- <string name="device_mac_address">24:0A:C4:A5:D2:5A</string> -->
 </resources>
