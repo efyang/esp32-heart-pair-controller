@@ -20,6 +20,7 @@ import android.view.MenuItem
 import android.R.id.edit
 import android.app.WallpaperColors
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothGatt
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
@@ -27,16 +28,25 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Build
 import android.provider.Settings
+import android.view.View
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.clj.fastble.BleManager
+import com.clj.fastble.callback.BleGattCallback
+import com.clj.fastble.data.BleDevice
+import com.clj.fastble.exception.BleException
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.switch_item.*
+import java.lang.Exception
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var prefs: SharedPreferences
     lateinit var defaultMoodColors: IntArray
     lateinit var moodColors: IntArray
     lateinit var moodNames: Array<String>
@@ -74,6 +84,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        prefs = this.getSharedPreferences("com.example.esp32heartpaircontroller", Context.MODE_PRIVATE)
+
         defaultMoodColors = resources.getIntArray(R.array.defaultMoodColors)
         moodColors = defaultMoodColors.copyOf()
         moodNames = resources.getStringArray(R.array.moodNames)
@@ -86,6 +98,8 @@ class MainActivity : AppCompatActivity() {
                 .setReConnectCount(1, 5000)
                 .setConnectOverTime(20000)
                 .setOperateTimeout(5000);
+
+
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         loadFragment(HomeFragment())
@@ -105,6 +119,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
+        val power_switch: Switch = menu?.findItem(R.id.power_switch)!!.actionView.findViewById(R.id.layout_switch)
+        power_switch.setOnClickListener {
+            System.out.println("power switch")
+        }
+
         return true
     }
 
@@ -134,6 +153,39 @@ class MainActivity : AppCompatActivity() {
                     val f = (currentFragment as HomeFragment)
                     f.reloadColors()
                 }
+            }
+            R.id.device_connect -> {
+                val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
+                BleManager.getInstance().connect(device_mac, object:BleGattCallback() {
+                    override fun onStartConnect() {
+                        Toast.makeText(applicationContext, "Connecting to Device...", Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onConnectFail(bleDevice: BleDevice, exception: BleException) {
+                        Toast.makeText(applicationContext, "Failed to Connect to Device", Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onConnectSuccess(bleDevice: BleDevice, gatt: BluetoothGatt, status: Int) {
+                        Toast.makeText(applicationContext, "Connected to Device", Toast.LENGTH_SHORT).show()
+                        for (service in gatt.services) {
+                            for (characteristic in service.characteristics) {
+                                println("Found characteristic " + characteristic.uuid + " from service " + service.uuid)
+                            }
+                        }
+                    }
+
+                    override fun onDisConnected(
+                        isActiveDisConnected: Boolean,
+                        device: BleDevice?,
+                        gatt: BluetoothGatt?,
+                        status: Int
+                    ) {
+                        Toast.makeText(applicationContext, "Disconnected From Device", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+            R.id.save_config -> {
+                Toast.makeText(applicationContext, "Configuration Saved to Device", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
