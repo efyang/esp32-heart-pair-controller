@@ -175,27 +175,29 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, BLEConfigActivity::class.java).apply {}
                 startActivity(intent)
             }
-            R.id.color_reset -> {
-                moodColors = defaultMoodColors.copyOf()
-                lampColor = resources.getColor(R.color.defaultLampColor)
-                Toast.makeText(applicationContext, "Reset All Colors.", Toast.LENGTH_SHORT).show()
-                val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-                if (currentFragment is LampFragment) {
-                    val f = (currentFragment as LampFragment)
-                    f.setColor(lampColor)
-                } else if (currentFragment is DashboardFragment) {
-                    val f = (currentFragment as DashboardFragment)
-                    f.setColor(moodColors[f.currentTab])
-                } else if (currentFragment is HomeFragment) {
-                    val f = (currentFragment as HomeFragment)
-                    f.reloadColors()
-                }
-            }
             R.id.device_connect -> {
                 ble_connect()
             }
             R.id.save_config -> {
-                Toast.makeText(applicationContext, "Configuration Saved to Device", Toast.LENGTH_SHORT).show()
+                val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
+                val bleManager = BleManager.getInstance()
+                if (bleManager.isConnected(device_mac)) {
+
+                    val device: BleDevice = bleManager.allConnectedDevice.filter { d -> d!!.mac == device_mac }[0]
+                    bleManager.write(device,
+                        "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
+                        "eb02ef6a-07cd-4bdb-babe-3375579dc9af",
+                        byteArrayOf(1),
+                        object: BleWriteCallback() {
+                            override fun onWriteFailure(exception: BleException?) {
+                            }
+
+                            override fun onWriteSuccess(current: Int, total: Int, justWrite: ByteArray?) {
+                                Toast.makeText(applicationContext, "Configuration Saved to Device", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                }
+
             }
             R.id.prom_switch -> {
                 val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))

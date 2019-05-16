@@ -23,6 +23,7 @@ import com.madrapps.pikolo.listeners.SimpleColorSelectionListener
 import kotlinx.coroutines.async
 import java.util.*
 import android.R.color
+import com.clj.fastble.callback.BleReadCallback
 import com.clj.fastble.callback.BleWriteCallback
 import com.clj.fastble.exception.BleException
 import kotlin.collections.HashMap
@@ -66,6 +67,28 @@ class DashboardFragment : Fragment() {
         tabs.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 currentTab = tab?.position!!
+
+            val bleManager = BleManager.getInstance()
+            if (bleManager.isConnected(device_mac)) {
+            val device: BleDevice = bleManager.allConnectedDevice.filter { d -> d!!.mac == device_mac }[0]
+            bleManager.read(device,
+                    "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
+                    TAB_UUID_MAPPINGS[currentTab],
+                    object: BleReadCallback() {
+                        override fun onReadSuccess(data: ByteArray?) {
+                            val c = (0xFF shl 24) or
+                                    (((data!![0]).toInt() and 0xFF) shl 16) or
+                                    (((data!![1]).toInt() and 0xFF) shl 8) or
+                                    (((data!![2]).toInt() and 0xFF) shl 0)
+                            parentActivity.moodColors[currentTab] = c
+                            setColor(c)
+                        }
+
+                        override fun onReadFailure(exception: BleException?) {
+                        }
+                    })
+            }
+
                 val color = parentActivity.moodColors[currentTab]
                 setColor(color)
                 tabs.setSelectedTabIndicatorColor(color)
@@ -90,6 +113,8 @@ class DashboardFragment : Fragment() {
 
         tabs.getTabAt(1)?.select()
         tabs.getTabAt(0)?.select()
+
+
 
         return view
     }
