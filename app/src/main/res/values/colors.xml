@@ -3,10 +3,10 @@
     <color name="colorPrimary">#F7CAC9</color>
     <color name="colorPrimaryDark">#92A8D1</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="defaultLoveColor">#F7CAC9</color>
-    <color name="defaultHappyColor">#FFF176</color>
-    <color name="defaultSadColor">#92A8D1</color>
-    <color name="defaultFearColor">#ab47bc</color>
+    <color name="defaultLoveColor">#FF47AA</color>
+    <color name="defaultHappyColor">#A79600</color>
+    <color name="defaultSadColor">#001E5C</color>
+    <color name="defaultFearColor">#77008A</color>
     <color name="defaultAngerColor">#7F0000</color>
     <array name="defaultMoodColors">
         <item>@color/defaultLoveColor</item>
@@ -15,5 +15,5 @@
         <item>@color/defaultFearColor</item>
         <item>@color/defaultAngerColor</item>
     </array>
-    <color name="defaultLampColor">#FFC7B0</color>
+    <color name="defaultLampColor">#B94D19</color>
 </resources>

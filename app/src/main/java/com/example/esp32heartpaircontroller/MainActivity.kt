@@ -36,6 +36,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.clj.fastble.BleManager
 import com.clj.fastble.callback.BleGattCallback
+import com.clj.fastble.callback.BleWriteCallback
 import com.clj.fastble.data.BleDevice
 import com.clj.fastble.exception.BleException
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -54,14 +55,8 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         var fragment: Fragment? = null;
         when (item.itemId) {
-            R.id.navigation_home -> {
-                fragment = HomeFragment()
-            }
             R.id.navigation_dashboard -> {
                 fragment = DashboardFragment()
-            }
-            R.id.navigation_device_network -> {
-                fragment = NetworkSettingsFragment()
             }
             R.id.navigation_lamp -> {
                 fragment = LampFragment()
@@ -99,10 +94,10 @@ class MainActivity : AppCompatActivity() {
                 .setConnectOverTime(20000)
                 .setOperateTimeout(5000);
 
-
+        ble_connect()
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        loadFragment(HomeFragment())
+        loadFragment(DashboardFragment())
     }
 
     fun setBluetooth(enable: Boolean): Boolean {
@@ -120,20 +115,62 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         val power_switch: Switch = menu?.findItem(R.id.power_switch)!!.actionView.findViewById(R.id.layout_switch)
-        power_switch.setOnClickListener {
-            System.out.println("power switch")
+        power_switch.setOnCheckedChangeListener {buttonView, isChecked ->
+                val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
+                val bleManager = BleManager.getInstance()
+                if (bleManager.isConnected(device_mac)) {
+                val device: BleDevice = bleManager.allConnectedDevice.filter { d -> d!!.mac == device_mac }[0]
+                bleManager.write(device,
+                    "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
+                    "ae2c2e59-fb28-4737-9144-7dc72d69ccf4",
+                    byteArrayOf(if (isChecked) 0 else 4),
+                    object: BleWriteCallback() {
+                        override fun onWriteFailure(exception: BleException?) {
+                        }
+
+                        override fun onWriteSuccess(current: Int, total: Int, justWrite: ByteArray?) {
+                        }
+                    })
+            }
         }
 
         return true
     }
 
+    fun ble_connect() {
+        val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
+        BleManager.getInstance().connect(device_mac, object:BleGattCallback() {
+            override fun onStartConnect() {
+                Toast.makeText(applicationContext, "Connecting to Device...", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onConnectFail(bleDevice: BleDevice, exception: BleException) {
+                Toast.makeText(applicationContext, "Failed to Connect to Device", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onConnectSuccess(bleDevice: BleDevice, gatt: BluetoothGatt, status: Int) {
+                Toast.makeText(applicationContext, "Connected to Device", Toast.LENGTH_SHORT).show()
+                for (service in gatt.services) {
+                    for (characteristic in service.characteristics) {
+                        println("Found characteristic " + characteristic.uuid + " from service " + service.uuid)
+                    }
+                }
+            }
+
+            override fun onDisConnected(
+                isActiveDisConnected: Boolean,
+                device: BleDevice?,
+                gatt: BluetoothGatt?,
+                status: Int
+            ) {
+                Toast.makeText(applicationContext, "Disconnected From Device", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         System.out.println(item)
         when (item?.itemId) {
-            R.id.name_config -> {
-                val intent = Intent(this, ConfigActivity::class.java).apply {}
-                startActivity(intent)
-            }
             R.id.ble_settings -> {
                 val intent = Intent(this, BLEConfigActivity::class.java).apply {}
                 startActivity(intent)
@@ -155,37 +192,30 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             R.id.device_connect -> {
-                val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
-                BleManager.getInstance().connect(device_mac, object:BleGattCallback() {
-                    override fun onStartConnect() {
-                        Toast.makeText(applicationContext, "Connecting to Device...", Toast.LENGTH_SHORT).show()
-                    }
-
-                    override fun onConnectFail(bleDevice: BleDevice, exception: BleException) {
-                        Toast.makeText(applicationContext, "Failed to Connect to Device", Toast.LENGTH_SHORT).show()
-                    }
-
-                    override fun onConnectSuccess(bleDevice: BleDevice, gatt: BluetoothGatt, status: Int) {
-                        Toast.makeText(applicationContext, "Connected to Device", Toast.LENGTH_SHORT).show()
-                        for (service in gatt.services) {
-                            for (characteristic in service.characteristics) {
-                                println("Found characteristic " + characteristic.uuid + " from service " + service.uuid)
-                            }
-                        }
-                    }
-
-                    override fun onDisConnected(
-                        isActiveDisConnected: Boolean,
-                        device: BleDevice?,
-                        gatt: BluetoothGatt?,
-                        status: Int
-                    ) {
-                        Toast.makeText(applicationContext, "Disconnected From Device", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                ble_connect()
             }
             R.id.save_config -> {
                 Toast.makeText(applicationContext, "Configuration Saved to Device", Toast.LENGTH_SHORT).show()
+            }
+            R.id.prom_switch -> {
+                val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
+                val bleManager = BleManager.getInstance()
+                if (bleManager.isConnected(device_mac)) {
+
+                    val device: BleDevice = bleManager.allConnectedDevice.filter { d -> d!!.mac == device_mac }[0]
+                    bleManager.write(device,
+                        "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
+                        "ae2c2e59-fb28-4737-9144-7dc72d69ccf4",
+                        byteArrayOf(3),
+                        object: BleWriteCallback() {
+                            override fun onWriteFailure(exception: BleException?) {
+                            }
+
+                            override fun onWriteSuccess(current: Int, total: Int, justWrite: ByteArray?) {
+                                Toast.makeText(applicationContext, "Promposal Mode Enabled", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                }
             }
         }
         return super.onOptionsItemSelected(item)

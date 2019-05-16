@@ -21,8 +21,10 @@ class BLEConfigActivity : AppCompatActivity() {
 
 
         val prefs = this.getSharedPreferences("com.example.esp32heartpaircontroller", Context.MODE_PRIVATE)
+        bleMacAddressInput.setText(prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address)))
 
         bleConfigButton.setOnClickListener{
+            prefs.edit().putString("device_mac_address", bleMacAddressInput.text.toString()).apply()
             // update the values
             Toast.makeText(applicationContext, "BLE Configured.", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, MainActivity::class.java).apply {}

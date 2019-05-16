@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="Connect to Device" android:id="@+id/device_connect"/>
-    <item android:title="Name Configuration" android:id="@+id/name_config" android:checkable="false"
-    />
     <item android:title="Save Configuration To Device" android:id="@+id/save_config"/>
     <item android:title="Reset All Colors" android:id="@+id/color_reset"/>
     <item android:title="(Advanced) BLE Settings" android:id="@+id/ble_settings">
@@ -11,5 +9,7 @@
             android:id="@+id/power_switch"
             android:title="Power Switch"
             app:showAsAction="always"
-            app:actionLayout="@layout/switch_item"/>
+            app:actionLayout="@layout/switch_item">
+    </item>
+    <item android:title="Prom Switch" android:id="@+id/prom_switch"/>
 </menu>
