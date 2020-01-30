@@ -19,6 +19,7 @@ import com.clj.fastble.data.BleDevice
 import com.clj.fastble.exception.BleException
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.w3c.dom.Text
 
 class HomeFragment : Fragment() {
     lateinit var localImageViews: Array<ImageView>
@@ -26,7 +27,9 @@ class HomeFragment : Fragment() {
     lateinit var localTextViews: Array<TextView>
     lateinit var pairedTextViews: Array<TextView>
     val offAlphas: FloatArray = floatArrayOf(0f, 0f, 0f, 0f, 0f)
-    val onAlphas: FloatArray = floatArrayOf(0.5f, 1f, 1f, 1f, 1f)
+    val onAlphas: FloatArray = floatArrayOf(0.5f, 0.5f, 0.5f, 0.5f, 0.5f)
+
+    private var fadeAnimationDuration: Long = 500;
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         System.out.println("inflate")
@@ -124,7 +127,7 @@ class HomeFragment : Fragment() {
         pairedImageViews = arrayOf(pairedLoveColorImageView, pairedHappyColorImageView, pairedSadColorImageView, pairedFearColorImageView, pairedAngerColorImageView)
         pairedTextViews = arrayOf(pairedHappyColorTextView, pairedSadColorTextView, pairedFearColorTextView, pairedAngerColorTextView)
 
-        reloadColors()
+        loadColors()
 
         return view
     }
@@ -151,22 +154,68 @@ class HomeFragment : Fragment() {
         v.background.setColorFilter(ColorUtils.HSLToColor(hsl), PorterDuff.Mode.MULTIPLY)
     }
 
+    fun loadColorsSet(imageViews: Array<ImageView>, textViews: Array<TextView>, moodStatus: Array<Boolean>) {
+        val parentActivity = activity!! as MainActivity
+        for ((v, i) in imageViews zip (0..5)) {
+            setColor(v, parentActivity.moodColors[i])
+            if (moodStatus[i]) {
+                v.alpha = onAlphas[i]
+                if (i > 0) {
+                    textViews[i - 1].alpha = 1f
+                }
+            } else {
+                v.alpha = offAlphas[i]
+                if (i > 0) {
+                    textViews[i - 1].alpha = 0f
+                }
+            }
+        }
+    }
+
+    fun reloadColorsSet(imageViews: Array<ImageView>, textViews: Array<TextView>, moodStatus: Array<Boolean>) {
+        val parentActivity = activity!! as MainActivity
+        for ((v, i) in imageViews zip (0..5)) {
+            setColor(v, parentActivity.moodColors[i])
+            if (moodStatus[i]) {
+                // v.alpha = onAlphas[i]
+                v.apply {
+                    animate().alpha(onAlphas[i])
+                        .setDuration(fadeAnimationDuration)
+                        .setListener(null)
+                }
+                if (i > 0) {
+                    textViews[i - 1].apply{
+                        animate().alpha(1f)
+                            .setDuration(fadeAnimationDuration)
+                            .setListener(null)
+                    }
+                }
+            } else {
+                v.apply {
+                    animate().alpha(offAlphas[i])
+                        .setDuration(fadeAnimationDuration)
+                        .setListener(null)
+                }
+                if (i > 0) {
+                    textViews[i - 1].apply{
+                        animate().alpha(0f)
+                            .setDuration(fadeAnimationDuration)
+                            .setListener(null)
+                    }
+                }
+            }
+        }
+    }
+
     fun reloadColors() {
         val parentActivity = activity!! as MainActivity
-        for ((v, i) in localImageViews zip (0..5)) {
-            setColor(v, parentActivity.moodColors[i])
-            v.alpha = offAlphas[i]
-            if (i > 0) {
-                localTextViews[i - 1].alpha = 1f
-            }
-        }
+        reloadColorsSet(localImageViews, localTextViews, parentActivity.localMoodStatus)
+        reloadColorsSet(pairedImageViews, pairedTextViews, parentActivity.pairedMoodStatus)
+    }
 
-        for ((v, i) in pairedImageViews zip (0..5)) {
-            setColor(v, parentActivity.moodColors[i])
-            v.alpha = onAlphas[i]
-            if (i > 0) {
-                localTextViews[i - 1].alpha = 0f
-            }
-        }
+    fun loadColors() {
+        val parentActivity = activity!! as MainActivity
+        loadColorsSet(localImageViews, localTextViews, parentActivity.localMoodStatus)
+        loadColorsSet(pairedImageViews, pairedTextViews, parentActivity.pairedMoodStatus)
     }
 }

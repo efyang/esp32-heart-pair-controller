@@ -57,6 +57,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var defaultMoodColors: IntArray
     lateinit var moodColors: IntArray
     lateinit var moodNames: Array<String>
+    var localMoodStatus: Array<Boolean> = arrayOf(false, false, false, false, false)
+    var pairedMoodStatus: Array<Boolean> = arrayOf(false, false, false, false, false)
     var lampColor: Int = 0
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         var fragment: Fragment? = null;
@@ -182,6 +184,7 @@ class MainActivity : AppCompatActivity() {
                 val bleManager = BleManager.getInstance()
                 if (bleManager.isConnected(device_mac)) {
                     val device: BleDevice = bleManager.allConnectedDevice.filter { d -> d!!.mac == device_mac }[0]
+                    // read opmode
                     bleManager.read(device,
                         "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
                         "ae2c2e59-fb28-4737-9144-7dc72d69ccf4",
@@ -194,13 +197,26 @@ class MainActivity : AppCompatActivity() {
                             }
                         })
 
+                    // read mood bitstring
+                    bleManager.read(device,
+                        "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
+                        "cc6d6901-70d8-43e0-af2b-d5bd0eacf32a",
+                        object: BleReadCallback() {
+                            override fun onReadSuccess(data: ByteArray?) {
+                                println("read bitstring " + Arrays.toString(data))
+                                readMoodBitstring(data)
+                            }
+
+                            override fun onReadFailure(exception: BleException?) {
+                            }
+                        })
+
                     bleManager.notify(device,
                         "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
                         "cc6d6901-70d8-43e0-af2b-d5bd0eacf32a",
                         object: BleNotifyCallback() {
                             override fun onCharacteristicChanged(data: ByteArray?) {
-                                // bits 0-4 are local, 5-9 are remote
-
+                                readMoodBitstring(data)
                             }
 
                             override fun onNotifyFailure(exception: BleException?) {
@@ -224,6 +240,30 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Disconnected From Device", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    fun readMoodBitstring(data: ByteArray?) {
+        // bits 0-4 are local, 5-9 are remote
+        val mood_bitstring = ((data!![1].toInt() and 0xFF) shl 8) or (data!![0].toInt() and 0xFF)
+
+        val local_love = ((mood_bitstring shr 9) and 1) == 1
+        val local_happy = ((mood_bitstring shr 8) and 1) == 1
+        val local_sad = ((mood_bitstring shr 7) and 1) == 1
+        val local_fear = ((mood_bitstring shr 6) and 1) == 1
+        val local_anger = ((mood_bitstring shr 5) and 1) == 1
+        val paired_love = ((mood_bitstring shr 4) and 1) == 1
+        val paired_happy = ((mood_bitstring shr 3) and 1) == 1
+        val paired_sad = ((mood_bitstring shr 2) and 1) == 1
+        val paired_fear = ((mood_bitstring shr 1) and 1) == 1
+        val paired_anger = ((mood_bitstring shr 0) and 1) == 1
+
+        pairedMoodStatus = arrayOf(paired_love, paired_happy, paired_sad, paired_fear, paired_anger)
+        localMoodStatus = arrayOf(local_love, local_happy, local_sad, local_fear, local_anger)
+
+        val fragmentContainer = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (fragmentContainer != null && fragmentContainer is HomeFragment) {
+            fragmentContainer.reloadColors()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
