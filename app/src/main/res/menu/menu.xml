@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/user_config"
+            android:title="Configure Users" />
     <item android:title="Connect to Device" android:id="@+id/device_connect"/>
     <item android:title="Save Configuration To Device" android:id="@+id/save_config"/>
+    <item
+            android:id="@+id/network_settings"
+            android:title="Network Configuration" />
     <item android:title="(Advanced) BLE Settings" android:id="@+id/ble_settings">
     </item>
     <item

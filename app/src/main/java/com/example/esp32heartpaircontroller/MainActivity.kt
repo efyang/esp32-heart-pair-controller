@@ -18,6 +18,7 @@ import android.database.Cursor
 import android.view.Menu
 import android.view.MenuItem
 import android.R.id.edit
+import android.app.Activity
 import android.app.WallpaperColors
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothGatt
@@ -26,9 +27,11 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.view.View
+import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
@@ -39,6 +42,7 @@ import com.clj.fastble.callback.BleGattCallback
 import com.clj.fastble.callback.BleWriteCallback
 import com.clj.fastble.data.BleDevice
 import com.clj.fastble.exception.BleException
+import com.github.dhaval2404.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.switch_item.*
 import java.lang.Exception
@@ -55,6 +59,9 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         var fragment: Fragment? = null;
         when (item.itemId) {
+            R.id.navigation_home -> {
+                fragment = HomeFragment()
+            }
             R.id.navigation_dashboard -> {
                 fragment = DashboardFragment()
             }
@@ -97,7 +104,34 @@ class MainActivity : AppCompatActivity() {
         ble_connect()
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        loadFragment(DashboardFragment())
+        loadFragment(HomeFragment())
+    }
+
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            //Image Uri will not be null for RESULT_OK
+            prefs = this.getSharedPreferences("com.example.esp32heartpaircontroller", Context.MODE_PRIVATE)
+            val fileUri = data?.data
+            when (requestCode and 0x0000ffff) {
+                LOCAL_IMAGE_REQ_CODE -> {
+                    prefs.edit().putString("local_image_uri", fileUri.toString()).apply()
+                }
+                PAIRED_IMAGE_REQ_CODE -> {
+                    prefs.edit().putString("paired_image_uri", fileUri.toString()).apply()
+                }
+            }
+            val homeFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as HomeFragment?
+            if (homeFragment != null) {
+                homeFragment.reloadPortraits()
+            }
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show()
+        }
     }
 
     fun setBluetooth(enable: Boolean): Boolean {
@@ -155,6 +189,7 @@ class MainActivity : AppCompatActivity() {
                         println("Found characteristic " + characteristic.uuid + " from service " + service.uuid)
                     }
                 }
+                // update stuff here on connection
             }
 
             override fun onDisConnected(
@@ -171,12 +206,20 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         System.out.println(item)
         when (item?.itemId) {
+            R.id.user_config -> {
+                val intent = Intent(this, ConfigActivity::class.java).apply {}
+                startActivity(intent)
+            }
             R.id.ble_settings -> {
                 val intent = Intent(this, BLEConfigActivity::class.java).apply {}
                 startActivity(intent)
             }
             R.id.device_connect -> {
                 ble_connect()
+            }
+            R.id.network_settings -> {
+                val intent = Intent(this, NetworkConfigActivity::class.java).apply {}
+                startActivity(intent)
             }
             R.id.save_config -> {
                 val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
@@ -294,5 +337,8 @@ class MainActivity : AppCompatActivity() {
         private val TAG = MainActivity::class.java!!.getSimpleName()
         private val REQUEST_CODE_OPEN_GPS = 1
         private val REQUEST_CODE_PERMISSION_LOCATION = 2
+
+        const val LOCAL_IMAGE_REQ_CODE = 101
+        const val PAIRED_IMAGE_REQ_CODE = 102
     }
 }

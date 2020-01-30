@@ -6,19 +6,33 @@
     <string name="title_device_network">Network</string>
     <string name="localUserName">Cindy</string>
     <string name="pairedUserName">Edward</string>
-    <string name="heart_emoji">❤️</string>
+    <string name="heart_emoji">\&lt;3</string>
 
     <string name="happyNote">:)))</string>
     <string name="sadNote">:\'(</string>
-    <string name="fearNote">😟</string>
+    <string name="fearNote">;)</string>
     <string name="angerNote">&gt;:(</string>
 
     <string-array name="moodNames">
         <item>Love</item>
         <item>Happy</item>
         <item>Sad</item>
-        <item>Nervous</item>
-        <item>Angry</item>
+        <item>;)</item>
+        <item>Stressed</item>
+    </string-array>
+
+    <string-array name="wifi_modes">
+        <item>Normal</item>
+        <item>eduroam</item>
+    </string-array>
+
+    <string-array name="modes">
+        <item>Normal</item>
+        <item>Lamp</item>
+        <item>Lamp With Buttons</item>
+        <item>Prom</item>
+        <item>Off</item>
+        <item>Light Show</item>
     </string-array>
 
     <string name="notifyTitle">Notification</string>

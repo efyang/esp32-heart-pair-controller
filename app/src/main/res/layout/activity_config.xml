@@ -52,4 +52,5 @@
             app:layout_constraintBottom_toTopOf="@+id/pairedNameInput" app:layout_constraintEnd_toEndOf="@+id/pairedNameInput"
             app:layout_constraintStart_toStartOf="@+id/pairedNameInput" app:layout_constraintHorizontal_bias="0.0"
     />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
