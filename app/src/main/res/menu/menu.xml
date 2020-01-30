@@ -10,11 +10,4 @@
             android:title="Network Configuration" />
     <item android:title="(Advanced) BLE Settings" android:id="@+id/ble_settings">
     </item>
-    <item
-            android:id="@+id/power_switch"
-            android:title="Power Switch"
-            app:showAsAction="always"
-            app:actionLayout="@layout/switch_item">
-    </item>
-    <item android:title="Prom Switch" android:id="@+id/prom_switch"/>
 </menu>

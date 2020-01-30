@@ -38,29 +38,6 @@ class LampFragment : Fragment() {
         val parentActivity = activity!! as MainActivity
         colorPicker = view.findViewById(R.id.colorPicker2)
         imageView = view.findViewById(R.id.imageView2)
-        val enableToggle: Button = view.findViewById(R.id.lampToggleButton)
-        //set_enabled(colorPicker, imageView)
-
-        enableToggle.setOnClickListener {
-            lamp_enabled = !lamp_enabled
-            //set_enabled(colorPicker, imageView)
-
-            val bleManager = BleManager.getInstance()
-            if (bleManager.isConnected(device_mac)) {
-                val device: BleDevice = bleManager.allConnectedDevice.filter { d -> d!!.mac == device_mac }[0]
-                bleManager.write(device,
-                    "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
-                    "ae2c2e59-fb28-4737-9144-7dc72d69ccf4",
-                    byteArrayOf(if (lamp_enabled) 1 else 0),
-                    object: BleWriteCallback() {
-                        override fun onWriteFailure(exception: BleException?) {
-                        }
-
-                        override fun onWriteSuccess(current: Int, total: Int, justWrite: ByteArray?) {
-                        }
-                    })
-            }
-        }
 
         colorPicker.setColorSelectionListener(object : SimpleColorSelectionListener() {
             override fun onColorSelected(color: Int) {
@@ -70,7 +47,7 @@ class LampFragment : Fragment() {
             }
         })
 
-        setColor(resources.getColor(R.color.colorPrimary))
+        setColor(prefs.getInt("lamp_color", resources.getColor(R.color.colorPrimary)))
 
         val bleManager = BleManager.getInstance()
         if (bleManager.isConnected(device_mac)) {
@@ -84,6 +61,7 @@ class LampFragment : Fragment() {
                                 (((data!![0]).toInt() and 0xFF) shl 16) or
                                 (((data!![1]).toInt() and 0xFF) shl 8) or
                                 (((data!![2]).toInt() and 0xFF) shl 0)
+                        prefs.edit().putInt("lamp_color", c).apply()
                         setColor(c)
                     }
 

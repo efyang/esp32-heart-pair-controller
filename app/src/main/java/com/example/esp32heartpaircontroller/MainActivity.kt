@@ -39,6 +39,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.clj.fastble.BleManager
 import com.clj.fastble.callback.BleGattCallback
+import com.clj.fastble.callback.BleNotifyCallback
+import com.clj.fastble.callback.BleReadCallback
 import com.clj.fastble.callback.BleWriteCallback
 import com.clj.fastble.data.BleDevice
 import com.clj.fastble.exception.BleException
@@ -90,8 +92,13 @@ class MainActivity : AppCompatActivity() {
 
         defaultMoodColors = resources.getIntArray(R.array.defaultMoodColors)
         moodColors = defaultMoodColors.copyOf()
+        moodColors[0] = prefs.getInt("love_color", defaultMoodColors[0])
+        moodColors[1] = prefs.getInt("happy_color", defaultMoodColors[1])
+        moodColors[2] = prefs.getInt("sad_color", defaultMoodColors[2])
+        moodColors[3] = prefs.getInt("fear_color", defaultMoodColors[3])
+        moodColors[4] = prefs.getInt("anger_color", defaultMoodColors[4])
         moodNames = resources.getStringArray(R.array.moodNames)
-        lampColor = resources.getColor(R.color.defaultLampColor)
+        lampColor = prefs.getInt("lamp_color", resources.getColor(R.color.defaultLampColor))
         setBluetooth(true)
         checkPermissions()
         BleManager.getInstance().init(getApplication());
@@ -148,26 +155,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
-        val power_switch: Switch = menu?.findItem(R.id.power_switch)!!.actionView.findViewById(R.id.layout_switch)
-        power_switch.setOnCheckedChangeListener {buttonView, isChecked ->
-                val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
-                val bleManager = BleManager.getInstance()
-                if (bleManager.isConnected(device_mac)) {
-                val device: BleDevice = bleManager.allConnectedDevice.filter { d -> d!!.mac == device_mac }[0]
-                bleManager.write(device,
-                    "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
-                    "ae2c2e59-fb28-4737-9144-7dc72d69ccf4",
-                    byteArrayOf(if (isChecked) 0 else 4),
-                    object: BleWriteCallback() {
-                        override fun onWriteFailure(exception: BleException?) {
-                        }
-
-                        override fun onWriteSuccess(current: Int, total: Int, justWrite: ByteArray?) {
-                        }
-                    })
-            }
-        }
-
         return true
     }
 
@@ -190,6 +177,42 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 // update stuff here on connection
+
+
+                val bleManager = BleManager.getInstance()
+                if (bleManager.isConnected(device_mac)) {
+                    val device: BleDevice = bleManager.allConnectedDevice.filter { d -> d!!.mac == device_mac }[0]
+                    bleManager.read(device,
+                        "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
+                        "ae2c2e59-fb28-4737-9144-7dc72d69ccf4",
+                        object: BleReadCallback() {
+                            override fun onReadSuccess(data: ByteArray?) {
+                                prefs.edit().putInt("opmode", data!![0].toInt()).apply()
+                            }
+
+                            override fun onReadFailure(exception: BleException?) {
+                            }
+                        })
+
+                    bleManager.notify(device,
+                        "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
+                        "cc6d6901-70d8-43e0-af2b-d5bd0eacf32a",
+                        object: BleNotifyCallback() {
+                            override fun onCharacteristicChanged(data: ByteArray?) {
+                                // bits 0-4 are local, 5-9 are remote
+
+                            }
+
+                            override fun onNotifyFailure(exception: BleException?) {
+
+                            }
+
+                            override fun onNotifySuccess() {
+
+                            }
+                        })
+                }
+
             }
 
             override fun onDisConnected(
@@ -241,26 +264,6 @@ class MainActivity : AppCompatActivity() {
                         })
                 }
 
-            }
-            R.id.prom_switch -> {
-                val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
-                val bleManager = BleManager.getInstance()
-                if (bleManager.isConnected(device_mac)) {
-
-                    val device: BleDevice = bleManager.allConnectedDevice.filter { d -> d!!.mac == device_mac }[0]
-                    bleManager.write(device,
-                        "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
-                        "ae2c2e59-fb28-4737-9144-7dc72d69ccf4",
-                        byteArrayOf(3),
-                        object: BleWriteCallback() {
-                            override fun onWriteFailure(exception: BleException?) {
-                            }
-
-                            override fun onWriteSuccess(current: Int, total: Int, justWrite: ByteArray?) {
-                                Toast.makeText(applicationContext, "Promposal Mode Enabled", Toast.LENGTH_SHORT).show()
-                            }
-                        })
-                }
             }
         }
         return super.onOptionsItemSelected(item)

@@ -81,7 +81,16 @@ class DashboardFragment : Fragment() {
                                     (((data!![1]).toInt() and 0xFF) shl 8) or
                                     (((data!![2]).toInt() and 0xFF) shl 0)
                             parentActivity.moodColors[currentTab] = c
-                            setColor(c)
+                            when (c) {
+                                0 -> {prefs.edit().putInt("love_color", c).apply()}
+                                1 -> {prefs.edit().putInt("happy_color", c).apply()}
+                                2 -> {prefs.edit().putInt("sad_color", c).apply()}
+                                3 -> {prefs.edit().putInt("fear_color", c).apply()}
+                                4 -> {prefs.edit().putInt("anger_color", c).apply()}
+                            }
+                            if (tabs.selectedTabPosition == currentTab) {
+                                setColor(c)
+                            }
                         }
 
                         override fun onReadFailure(exception: BleException?) {
@@ -111,10 +120,10 @@ class DashboardFragment : Fragment() {
             Toast.makeText(context, "Reset " + parentActivity.moodNames[currentTab] + " Color", Toast.LENGTH_SHORT).show()
         }
 
-        tabs.getTabAt(1)?.select()
-        tabs.getTabAt(0)?.select()
-
-
+        val color = parentActivity.moodColors[currentTab]
+        setColor(color)
+        tabs.setSelectedTabIndicatorColor(color)
+        moodName.text = parentActivity.moodNames[currentTab] + " Color"
 
         return view
     }

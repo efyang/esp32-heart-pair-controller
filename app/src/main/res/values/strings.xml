@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ESP32 Heart Pair Controller</string>
+    <string name="app_name">Heart Pair Controller</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -30,9 +30,10 @@
         <item>Normal</item>
         <item>Lamp</item>
         <item>Lamp With Buttons</item>
+        <item>Configure</item>
         <item>Prom</item>
-        <item>Off</item>
         <item>Light Show</item>
+        <item>Off</item>
     </string-array>
 
     <string name="notifyTitle">Notification</string>
