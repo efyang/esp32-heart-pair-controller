@@ -44,4 +44,6 @@
 
     <string name="device_mac_address">24:0A:C4:A5:D3:12</string>
     <!-- <string name="device_mac_address">24:0A:C4:A5:D2:5A</string> -->
+    <string name="pairedComment">Princeton, NJ</string>
+    <string name="localComment">Chicago, IL</string>
 </resources>

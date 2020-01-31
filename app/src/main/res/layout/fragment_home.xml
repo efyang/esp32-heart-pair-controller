@@ -5,371 +5,494 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorBackground"
         android:gravity="center|fill_vertical"
         android:orientation="vertical">
 
-    <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_weight="1" />
-
-    <LinearLayout
+    <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginBottom="-5dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-        <TextView
-                android:id="@+id/pairedNameDisplay"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="right|center_vertical"
-                android:text="@string/localUserName"
-                android:textSize="24sp" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="@dimen/portrait_ring_diameter"
-                android:layout_height="@dimen/portrait_ring_diameter"
-                android:layout_weight="1">
-
-            <ImageView
-                    android:id="@+id/pairedLoveColorImageView"
-                    android:layout_width="@dimen/portrait_ring_diameter"
-                    android:layout_height="@dimen/portrait_ring_diameter"
-                    android:background="@drawable/bg_circle"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/pairedPortrait"
-                    android:layout_width="@dimen/portrait_diameter"
-                    android:layout_height="@dimen/portrait_diameter"
-                    app:layout_constraintBottom_toBottomOf="@+id/pairedLoveColorImageView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_person_black_24dp" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-
-    <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_weight="1" />
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="fill_horizontal|top"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|top">
-
-            <TextView
-                    android:id="@+id/pairedHappyText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/happyNote"
-                    android:textAlignment="center" />
-
-            <ImageView
-                    android:id="@+id/pairedHappyColorImageView"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/bg_circle"
-                    android:scaleType="centerInside" />
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|top">
-
-            <TextView
-                    android:id="@+id/pairedSadText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/sadNote"
-                    android:textAlignment="center" />
-
-            <ImageView
-                    android:id="@+id/pairedSadColorImageView"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/bg_circle"
-                    android:scaleType="centerInside" />
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|top">
-
-            <TextView
-                    android:id="@+id/pairedFearText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/fearNote"
-                    android:textAlignment="center" />
-
-            <ImageView
-                    android:id="@+id/pairedFearColorImageView"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/bg_circle"
-                    android:scaleType="centerInside" />
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|top">
-
-            <TextView
-                    android:id="@+id/pairedAngerText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/angerNote"
-                    android:textAlignment="center" />
-
-            <ImageView
-                    android:id="@+id/pairedAngerColorImageView"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/bg_circle" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="@dimen/portrait_ring_diameter"
-                android:layout_height="@dimen/portrait_ring_diameter"
-                android:layout_weight="1">
-
-            <ImageView
-                    android:id="@+id/localLoveColorImageView"
-                    android:layout_width="@dimen/portrait_ring_diameter"
-                    android:layout_height="@dimen/portrait_ring_diameter"
-                    android:background="@drawable/bg_circle"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/localPortrait"
-                    android:layout_width="@dimen/portrait_diameter"
-                    android:layout_height="@dimen/portrait_diameter"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_person_black_24dp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-                android:id="@+id/localNameDisplay"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="left|center_vertical"
-                android:text="@string/pairedUserName"
-                android:textSize="24sp" />
-
-    </LinearLayout>
-
-    <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_weight="1" />
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:baselineAligned="false"
-            android:gravity="fill_horizontal|top"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|top">
-
-            <TextView
-                    android:id="@+id/localHappyText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/happyNote"
-                    android:textAlignment="center" />
-
-            <ImageView
-                    android:id="@+id/localHappyColorImageView"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/bg_circle"
-                    android:scaleType="centerInside" />
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|top">
-
-            <TextView
-                    android:id="@+id/localSadText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/sadNote"
-                    android:textAlignment="center" />
-
-            <ImageView
-                    android:id="@+id/localSadColorImageView"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/bg_circle"
-                    android:scaleType="centerInside" />
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|top">
-
-            <TextView
-                    android:id="@+id/localFearText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/fearNote"
-                    android:textAlignment="center" />
-
-            <ImageView
-                    android:id="@+id/localFearColorImageView"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/bg_circle"
-                    android:scaleType="centerInside" />
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|top">
-
-            <TextView
-                    android:id="@+id/localAngerText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/angerNote"
-                    android:textAlignment="center" />
-
-            <ImageView
-                    android:id="@+id/localAngerColorImageView"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/bg_circle" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp">
+            app:cardBackgroundColor="@color/lightBackground"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="5dp">
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="fill_horizontal|center_vertical">
+                android:orientation="vertical">
 
-            <TextView
-                    android:id="@+id/textView16"
-                    android:layout_width="wrap_content"
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_weight="1" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Brightness" />
+                    android:orientation="horizontal">
 
-            <SeekBar
-                    android:id="@+id/brightnessBar"
-                    android:layout_width="wrap_content"
+                <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    <TextView
+                            android:id="@+id/pairedNameDisplay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/pairedUserName"
+                            android:textSize="24sp" />
+
+                    <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="5dp"
+                            android:layout_weight="1" />
+
+                    <TextView
+                            android:id="@+id/pairedCommentDisplay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/pairedComment" />
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="@dimen/portrait_ring_diameter"
+                        android:layout_height="@dimen/portrait_ring_diameter"
+                        android:layout_weight="1">
+
+                    <ImageView
+                            android:id="@+id/pairedLoveColorImageView"
+                            android:layout_width="@dimen/portrait_ring_diameter"
+                            android:layout_height="@dimen/portrait_ring_diameter"
+                            android:background="@drawable/bg_circle"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/pairedPortrait"
+                            android:layout_width="@dimen/portrait_diameter"
+                            android:layout_height="@dimen/portrait_diameter"
+                            app:layout_constraintBottom_toBottomOf="@+id/pairedLoveColorImageView"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_person_black_24dp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_weight="1" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5" />
+                    android:layout_weight="1"
+                    android:gravity="fill_horizontal|top"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|top">
+
+                    <TextView
+                            android:id="@+id/pairedHappyText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="5dp"
+                            android:text="@string/happyNote"
+                            android:textAlignment="center" />
+
+                    <ImageView
+                            android:id="@+id/pairedHappyColorImageView"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/bg_circle"
+                            android:scaleType="centerInside" />
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|top">
+
+                    <TextView
+                            android:id="@+id/pairedSadText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="5dp"
+                            android:text="@string/sadNote"
+                            android:textAlignment="center" />
+
+                    <ImageView
+                            android:id="@+id/pairedSadColorImageView"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/bg_circle"
+                            android:scaleType="centerInside" />
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|top">
+
+                    <TextView
+                            android:id="@+id/pairedFearText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="5dp"
+                            android:text="@string/fearNote"
+                            android:textAlignment="center" />
+
+                    <ImageView
+                            android:id="@+id/pairedFearColorImageView"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/bg_circle"
+                            android:scaleType="centerInside" />
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|top">
+
+                    <TextView
+                            android:id="@+id/pairedAngerText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="5dp"
+                            android:text="@string/angerNote"
+                            android:textAlignment="center" />
+
+                    <ImageView
+                            android:id="@+id/pairedAngerColorImageView"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/bg_circle" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_weight="1" />
+
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginBottom="-5dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/lightBackground"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="5dp">
 
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="fill_horizontal|center_vertical">
+                android:orientation="vertical">
 
-            <TextView
-                    android:id="@+id/textView17"
-                    android:layout_width="wrap_content"
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_weight="1" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Mode" />
+                    android:orientation="horizontal">
 
-            <Spinner
-                    android:id="@+id/opmode_spinner"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="@dimen/portrait_ring_diameter"
+                        android:layout_height="@dimen/portrait_ring_diameter"
+                        android:layout_weight="1">
+
+                    <ImageView
+                            android:id="@+id/localLoveColorImageView"
+                            android:layout_width="@dimen/portrait_ring_diameter"
+                            android:layout_height="@dimen/portrait_ring_diameter"
+                            android:background="@drawable/bg_circle"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/localPortrait"
+                            android:layout_width="@dimen/portrait_diameter"
+                            android:layout_height="@dimen/portrait_diameter"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_person_black_24dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                    <TextView
+                            android:id="@+id/localNameDisplay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/localUserName"
+                            android:textSize="24sp" />
+
+                    <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="5dp"
+                            android:layout_weight="1" />
+
+                    <TextView
+                            android:id="@+id/localCommentDisplay"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/localComment" />
+                </LinearLayout>
+
+                <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_weight="1" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:entries="@array/modes"
-                    android:spinnerMode="dropdown"
-                    android:textAlignment="center" />
-        </LinearLayout>
+                    android:layout_weight="1"
+                    android:baselineAligned="false"
+                    android:gravity="fill_horizontal|top"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
-    </LinearLayout>
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|top">
+
+                    <TextView
+                            android:id="@+id/localHappyText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="5dp"
+                            android:text="@string/happyNote"
+                            android:textAlignment="center" />
+
+                    <ImageView
+                            android:id="@+id/localHappyColorImageView"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/bg_circle"
+                            android:scaleType="centerInside" />
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|top">
+
+                    <TextView
+                            android:id="@+id/localSadText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="5dp"
+                            android:text="@string/sadNote"
+                            android:textAlignment="center" />
+
+                    <ImageView
+                            android:id="@+id/localSadColorImageView"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/bg_circle"
+                            android:scaleType="centerInside" />
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|top">
+
+                    <TextView
+                            android:id="@+id/localFearText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="5dp"
+                            android:text="@string/fearNote"
+                            android:textAlignment="center" />
+
+                    <ImageView
+                            android:id="@+id/localFearColorImageView"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/bg_circle"
+                            android:scaleType="centerInside" />
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal|top">
+
+                    <TextView
+                            android:id="@+id/localAngerText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="5dp"
+                            android:text="@string/angerNote"
+                            android:textAlignment="center" />
+
+                    <ImageView
+                            android:id="@+id/localAngerColorImageView"
+                            android:layout_width="55dp"
+                            android:layout_height="55dp"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/bg_circle" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_weight="1" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/lightBackground"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="5dp">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:orientation="vertical">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="fill_horizontal|center_vertical">
+
+                <TextView
+                        android:id="@+id/textView16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Brightness" />
+
+                <SeekBar
+                        android:id="@+id/brightnessBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5" />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="fill_horizontal|center_vertical">
+
+                <TextView
+                        android:id="@+id/textView17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:gravity="center"
+                        android:text="Mode" />
+
+                <Spinner
+                        android:id="@+id/opmode_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:entries="@array/modes"
+                        android:spinnerMode="dropdown"
+                        android:textAlignment="center" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

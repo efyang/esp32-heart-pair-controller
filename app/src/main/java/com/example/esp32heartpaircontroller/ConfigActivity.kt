@@ -23,11 +23,15 @@ class ConfigActivity : AppCompatActivity() {
         val prefs = this.getSharedPreferences("com.example.esp32heartpaircontroller", Context.MODE_PRIVATE)
         localNameInput.setText(prefs.getString("localUserName", getString(R.string.localUserName)))
         pairedNameInput.setText(prefs.getString("pairedUserName", getString(R.string.pairedUserName)))
+        localComment.setText(prefs.getString("localComment", getString(R.string.localComment)))
+        pairedComment.setText(prefs.getString("pairedComment", getString(R.string.pairedComment)))
 
         configOkButton.setOnClickListener{it ->
             // update the values
             prefs.edit().putString("localUserName", localNameInput.text.toString()).apply()
             prefs.edit().putString("pairedUserName", pairedNameInput.text.toString()).apply()
+            prefs.edit().putString("localComment", localComment.text.toString()).apply()
+            prefs.edit().putString("pairedComment", pairedComment.text.toString()).apply()
 
             Toast.makeText(applicationContext, "Names Set.", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, MainActivity::class.java).apply {}

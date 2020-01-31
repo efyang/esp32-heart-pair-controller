@@ -1,13 +1,18 @@
 package com.example.esp32heartpaircontroller
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.PorterDuff
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.CycleInterpolator
 import android.widget.*
 import androidx.core.graphics.ColorUtils
 import com.clj.fastble.BleManager
@@ -38,6 +43,10 @@ class HomeFragment : Fragment() {
         localNameDisplayView.text = prefs.getString("localUserName", getString(R.string.localUserName))
         val pairedNameDisplayView = view.findViewById(R.id.pairedNameDisplay) as TextView
         pairedNameDisplayView.text = prefs.getString("pairedUserName", getString(R.string.pairedUserName))
+        val localCommentDisplayView = view.findViewById(R.id.localCommentDisplay) as TextView
+        localCommentDisplayView.text = prefs.getString("localComment", getString(R.string.localComment))
+        val pairedCommentDisplayView = view.findViewById(R.id.pairedCommentDisplay) as TextView
+        pairedCommentDisplayView.text = prefs.getString("pairedComment", getString(R.string.pairedComment))
 
         val localLoveColorImageView: ImageView = view.findViewById(R.id.localLoveColorImageView)
         val localHappyColorImageView: ImageView = view.findViewById(R.id.localHappyColorImageView)
@@ -124,7 +133,7 @@ class HomeFragment : Fragment() {
         brightnessBar.progress = prefs.getInt("master_brightness", 255)
         brightnessBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                prefs.edit().putInt("master_brightness", 255).apply()
+                prefs.edit().putInt("master_brightness", p1).apply()
                 val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
 
                 val bleManager = BleManager.getInstance()
@@ -196,11 +205,15 @@ class HomeFragment : Fragment() {
             if (moodStatus[i]) {
                 v.alpha = onAlphas[i]
                 if (i > 0) {
+                    v.scaleX = 1f
+                    v.scaleY = 1f
                     textViews[i - 1].alpha = 1f
                 }
             } else {
                 v.alpha = offAlphas[i]
                 if (i > 0) {
+                    v.scaleX = 0f
+                    v.scaleY = 0f
                     textViews[i - 1].alpha = 0f
                 }
             }
@@ -212,12 +225,20 @@ class HomeFragment : Fragment() {
         for ((v, i) in imageViews zip (0..5)) {
             setColor(v, parentActivity.moodColors[i])
             if (moodStatus[i]) {
-                // v.alpha = onAlphas[i]
                 v.apply {
-                    animate().alpha(onAlphas[i])
-                        .setDuration(fadeAnimationDuration)
-                        .setListener(null)
+                    if (i > 0) {
+                        animate().scaleX(1f)
+                            .scaleY(1f)
+                            .alpha(onAlphas[i])
+                            .setDuration(fadeAnimationDuration)
+                            .setListener(null)
+                    } else {
+                        animate().alpha(onAlphas[i])
+                            .setDuration(fadeAnimationDuration)
+                            .setListener(null)
+                    }
                 }
+
                 if (i > 0) {
                     textViews[i - 1].apply{
                         animate().alpha(1f)
@@ -227,9 +248,17 @@ class HomeFragment : Fragment() {
                 }
             } else {
                 v.apply {
-                    animate().alpha(offAlphas[i])
-                        .setDuration(fadeAnimationDuration)
-                        .setListener(null)
+                    if (i > 0) {
+                        animate().scaleX(0f)
+                            .scaleY(0f)
+                            .alpha(offAlphas[i])
+                            .setDuration(fadeAnimationDuration)
+                            .setListener(null)
+                    } else {
+                        animate().alpha(offAlphas[i])
+                            .setDuration(fadeAnimationDuration)
+                            .setListener(null)
+                    }
                 }
                 if (i > 0) {
                     textViews[i - 1].apply{

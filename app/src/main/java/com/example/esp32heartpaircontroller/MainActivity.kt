@@ -182,6 +182,7 @@ class MainActivity : AppCompatActivity() {
                 val bleManager = BleManager.getInstance()
                 if (bleManager.isConnected(device_mac)) {
                     val device: BleDevice = bleManager.allConnectedDevice.filter { d -> d!!.mac == device_mac }[0]
+                    Thread.sleep(500)
                     // read opmode
                     bleManager.read(device,
                         "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
@@ -195,13 +196,14 @@ class MainActivity : AppCompatActivity() {
                             }
                         })
 
+                    Thread.sleep(500)
                     // read brightness
                     bleManager.read(device,
                         "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
                         "69ae6147-39d8-4d0e-8a5a-12e221041015",
                         object: BleReadCallback() {
                             override fun onReadSuccess(data: ByteArray?) {
-                                prefs.edit().putInt("master_brightness", data!![0].toInt()).apply()
+                                prefs.edit().putInt("master_brightness", data!![0].toUByte().toInt()).apply()
                                 val fragmentContainer = supportFragmentManager.findFragmentById(R.id.fragment_container)
                                 if (fragmentContainer != null && fragmentContainer is HomeFragment) {
                                     fragmentContainer.reloadBrightness()
@@ -212,6 +214,7 @@ class MainActivity : AppCompatActivity() {
                             }
                         })
 
+                    Thread.sleep(500)
                     // read mood bitstring
                     bleManager.read(device,
                         "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
@@ -223,8 +226,11 @@ class MainActivity : AppCompatActivity() {
                             }
 
                             override fun onReadFailure(exception: BleException?) {
+                                println("read failure")
+                                println(exception)
                             }
                         })
+                    Thread.sleep(500)
 
                     bleManager.notify(device,
                         "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
@@ -242,6 +248,7 @@ class MainActivity : AppCompatActivity() {
 
                             }
                         })
+                    Thread.sleep(500)
                 }
 
             }
