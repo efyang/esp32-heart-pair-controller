@@ -115,23 +115,41 @@ class NetworkConfigActivity : AppCompatActivity() {
 
     // chunk a message into multiple packets to prevent overflows
     fun write_multiple_packets(bleManager: BleManager, device: BleDevice, uuid_service: String, uuid_write: String, s: String) {
-        var i = 0
-        while (i * 20 < s.length) {
-            println(min(s.length, 20*(i+1)))
+        if (s.isNotEmpty()) {
+            var i = 0
+            while (i * 20 < s.length) {
+                println(min(s.length, 20*(i+1)))
+                bleManager.write(device,
+                    uuid_service,
+                    uuid_write,
+                    s.substring(20*i, min(s.length, 20*(i+1))).toByteArray(),
+                    object: BleWriteCallback() {
+                        override fun onWriteFailure(exception: BleException?) {
+                            println("write pass fail")
+                        }
+
+                        override fun onWriteSuccess(current: Int, total: Int, justWrite: ByteArray?) {
+                            println("write pass success")
+                        }
+                    })
+                i++
+                Thread.sleep(500)
+            }
+
+        } else {
             bleManager.write(device,
                 uuid_service,
                 uuid_write,
-                s.substring(20*i, min(s.length, 20*(i+1))).toByteArray(),
+                byteArrayOf(0),
                 object: BleWriteCallback() {
                     override fun onWriteFailure(exception: BleException?) {
-                        println("write pass fail")
+                        println("empty write pass fail")
                     }
 
                     override fun onWriteSuccess(current: Int, total: Int, justWrite: ByteArray?) {
-                        println("write pass success")
+                        println("empty write pass success")
                     }
                 })
-            i++
             Thread.sleep(500)
         }
     }
