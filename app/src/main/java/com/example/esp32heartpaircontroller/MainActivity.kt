@@ -38,10 +38,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.clj.fastble.BleManager
-import com.clj.fastble.callback.BleGattCallback
-import com.clj.fastble.callback.BleNotifyCallback
-import com.clj.fastble.callback.BleReadCallback
-import com.clj.fastble.callback.BleWriteCallback
+import com.clj.fastble.callback.*
 import com.clj.fastble.data.BleDevice
 import com.clj.fastble.exception.BleException
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -162,6 +159,7 @@ class MainActivity : AppCompatActivity() {
 
     fun ble_connect() {
         val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
+        if (BleManager.getInstance().isConnected(device_mac)) {return}
         BleManager.getInstance().connect(device_mac, object:BleGattCallback() {
             override fun onStartConnect() {
                 Toast.makeText(applicationContext, "Connecting to Device...", Toast.LENGTH_SHORT).show()

@@ -60,6 +60,13 @@ class DashboardFragment : Fragment() {
                 imageView.background.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
                 parentActivity.moodColors[currentTab] = color
                 tabs.setSelectedTabIndicatorColor(color)
+                when (currentTab) {
+                    0 -> {prefs.edit().putInt("love_color", color).apply()}
+                    1 -> {prefs.edit().putInt("happy_color", color).apply()}
+                    2 -> {prefs.edit().putInt("sad_color", color).apply()}
+                    3 -> {prefs.edit().putInt("fear_color", color).apply()}
+                    4 -> {prefs.edit().putInt("anger_color", color).apply()}
+                }
                 bleSetColor(color, currentTab, device_mac)
             }
         })
@@ -81,7 +88,7 @@ class DashboardFragment : Fragment() {
                                     (((data!![1]).toInt() and 0xFF) shl 8) or
                                     (((data!![2]).toInt() and 0xFF) shl 0)
                             parentActivity.moodColors[currentTab] = c
-                            when (c) {
+                            when (currentTab) {
                                 0 -> {prefs.edit().putInt("love_color", c).apply()}
                                 1 -> {prefs.edit().putInt("happy_color", c).apply()}
                                 2 -> {prefs.edit().putInt("sad_color", c).apply()}
