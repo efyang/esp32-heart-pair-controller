@@ -197,6 +197,23 @@ class MainActivity : AppCompatActivity() {
                             }
                         })
 
+                    // read brightness
+                    bleManager.read(device,
+                        "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
+                        "69ae6147-39d8-4d0e-8a5a-12e221041015",
+                        object: BleReadCallback() {
+                            override fun onReadSuccess(data: ByteArray?) {
+                                prefs.edit().putInt("master_brightness", data!![0].toInt()).apply()
+                                val fragmentContainer = supportFragmentManager.findFragmentById(R.id.fragment_container)
+                                if (fragmentContainer != null && fragmentContainer is HomeFragment) {
+                                    fragmentContainer.reloadBrightness()
+                                }
+                            }
+
+                            override fun onReadFailure(exception: BleException?) {
+                            }
+                        })
+
                     // read mood bitstring
                     bleManager.read(device,
                         "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",

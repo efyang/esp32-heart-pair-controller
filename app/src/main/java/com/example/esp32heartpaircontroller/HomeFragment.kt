@@ -8,10 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import androidx.core.graphics.ColorUtils
 import com.clj.fastble.BleManager
 import com.clj.fastble.callback.BleWriteCallback
@@ -66,6 +63,8 @@ class HomeFragment : Fragment() {
         val pairedFearColorTextView: TextView = view.findViewById(R.id.pairedFearText)
         val pairedAngerColorTextView: TextView = view.findViewById(R.id.pairedAngerText)
 
+        val brightnessBar: SeekBar = view.findViewById(R.id.brightnessBar)
+
         localPortraitImageView.setImageURI(
             Uri.parse(prefs.getString("local_image_uri",
             "android.resource://com.example.esp32heartpaircontroller/"+R.drawable.ic_person_black_24dp)))
@@ -102,7 +101,6 @@ class HomeFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 prefs.edit().putInt("opmode", position).apply()
                 val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
-                println("write pos " + position)
 
                 val bleManager = BleManager.getInstance()
                 if (bleManager.isConnected(device_mac)) {
@@ -122,6 +120,37 @@ class HomeFragment : Fragment() {
             }
         }
 
+        brightnessBar.max = 255
+        brightnessBar.progress = prefs.getInt("master_brightness", 255)
+        brightnessBar.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                prefs.edit().putInt("master_brightness", 255).apply()
+                val device_mac = prefs.getString("device_mac_address", resources.getString(R.string.device_mac_address))
+
+                val bleManager = BleManager.getInstance()
+                if (bleManager.isConnected(device_mac)) {
+                    val device: BleDevice = bleManager.allConnectedDevice.filter { d -> d!!.mac == device_mac }[0]
+                    bleManager.write(device,
+                        "d60df0e4-8a6f-4982-bf47-dab7e3b5d119",
+                        "69ae6147-39d8-4d0e-8a5a-12e221041015",
+                        byteArrayOf(p1.toByte()),
+                        object: BleWriteCallback() {
+                            override fun onWriteFailure(exception: BleException?) {
+                            }
+
+                            override fun onWriteSuccess(current: Int, total: Int, justWrite: ByteArray?) {
+                            }
+                        })
+                }
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+            }
+        })
+
         localImageViews = arrayOf(localLoveColorImageView, localHappyColorImageView, localSadColorImageView, localFearColorImageView, localAngerColorImageView)
         localTextViews = arrayOf(localHappyColorTextView, localSadColorTextView, localFearColorTextView, localAngerColorTextView)
         pairedImageViews = arrayOf(pairedLoveColorImageView, pairedHappyColorImageView, pairedSadColorImageView, pairedFearColorImageView, pairedAngerColorImageView)
@@ -130,6 +159,12 @@ class HomeFragment : Fragment() {
         loadColors()
 
         return view
+    }
+
+    fun reloadBrightness() {
+        val prefs = this.activity!!.getSharedPreferences("com.example.esp32heartpaircontroller", Context.MODE_PRIVATE)
+        val brightness_bar: SeekBar = view!!.findViewById(R.id.brightnessBar)
+        brightness_bar.progress = prefs.getInt("master_brightness", 255)
     }
 
     fun reloadPortraits() {
